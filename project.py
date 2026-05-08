@@ -75,14 +75,16 @@ def run_game(board, current_player, playerx, playero, engine):
 
                 if check_winner(board):
                     print(f"Congratulations, player {current_player} won")
-                    engine.say(f"Congratulations {current_player}!")
-                    engine.runAndWait()
+                    if engine:
+                        engine.say(f"Congratulations {current_player}!")
+                        engine.runAndWait()
                     return
                 
                 if is_full(board):
                     print(f"Draw!")
-                    engine.say(f"This is a draw! You are both equally good!")
-                    engine.runAndWait()
+                    if engine:
+                        engine.say(f"This is a draw! You are both equally good!")
+                        engine.runAndWait()
                     return
 
                 current_player = change_turn(current_player, playerx, playero)
@@ -94,8 +96,9 @@ def run_game(board, current_player, playerx, playero, engine):
             print("Invalid input! Please enter a number between 0-8")
             continue
         except KeyboardInterrupt:
-            engine.say(f"Good bye!")
-            engine.runAndWait()
+            if engine:
+                engine.say(f"Good bye!")
+                engine.runAndWait()
             sys.exit("\nGood Bye!")
 
 def main():
@@ -105,8 +108,11 @@ def main():
     current_player = playerx
 
     the_board = ["   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "]
-    engine = pyttsx3.init()
-    engine.setProperty('rate', 150)
+    try:
+        engine = pyttsx3.init()
+        engine.setProperty('rate', 150)
+    except Exception:
+        engine = None
     run_game(the_board, current_player, playerx, playero, engine)
 
 if __name__ == '__main__':
